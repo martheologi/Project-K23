@@ -1,28 +1,50 @@
 #include <iostream>
 #include <fstream>
+#include <bits/stdc++.h>
+
+#include "structs.h"
+
 using namespace std;
 
 int main()
 {
     fstream file;
-    string digits;
+    string digits = "";
+    string line;
+    int c = 0;
+    int id_flag = 1;
 
     // open file
-    file.open("input_small_id.txt");
-
+    file.open("input_small_id");
 
     // extracting from the file
-    file >> digits;
     while (file.good())
     {
         // displaying content
-        cout << digits << " ";
-        file >> digits;
-        //trying to seperate after \n
-        if (file.peek() == '\n'){
-            cout << "KAINOURIO MAKATZUNI!!!" << endl;
+        if (!getline (file, line)) break;
+        c++;
+        //cout << "KAINOURIO MAKATZUNI!!!" << endl;
+        Vector_Item item(c);
+
+        //pairnw ena ena ta xi
+        for (auto x : line){
+            if (x == ' '){
+                if(id_flag == 1){
+                    id_flag = 0;
+                }
+                else{
+                    item.push(stoi(digits));
+                }
+                digits = "";
+            }
+            else{
+               digits = digits + x;
+            }
         }
+        //item.print_item();
+        id_flag = 1;
     }
+    cout << "Dataset with "<< c << " items" << endl;
 
     file.close();
 
