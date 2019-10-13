@@ -1,6 +1,6 @@
-OBJS = funct.o VectorItem.o
-SOURCE = funct.cpp VectorItem.cpp
-HEADER = structs.h
+OBJS = lsh.o VectorItem.o hash.o
+SOURCE = lsh.cpp VectorItem.cpp hash.cpp
+HEADER = structs.h hash.h
 OUT = lsh
 CC = g++
 FLAGS = -g3 -c
@@ -8,11 +8,14 @@ FLAGS = -g3 -c
 all: $(OBJS)
 	$(CC) -g $(OBJS) -o $(OUT)
 
-funct.o: funct.cpp
-	$(CC) $(FLAGS) funct.cpp
+lsh.o: lsh.cpp
+	$(CC) $(FLAGS) lsh.cpp
 
 VectorItem.o: VectorItem.cpp
 	$(CC) $(FLAGS) VectorItem.cpp
+
+hash.o: hash.cpp
+	$(CC) $(FLAGS) hash.cpp
 
 clean:
 	rm -f $(OBJS) $(OUT)
