@@ -1,52 +1,31 @@
 #include <iostream>
 #include <fstream>
-#include <bits/stdc++.h>
-
-#include "structs.h"
-
+#include <string>
 using namespace std;
 
-int main()
+
+void write_results(string filename, string qID, string NnID, double dLSH, double dTrue, double tLSH, double tTrue)
 {
-    fstream file;
-    string digits = "";
-    string line;
-    int c = 0;
-    int id_flag = 1;
 
-    // open file
-    file.open("input_small_id");
+    ofstream file;
+    file.open (filename, ios::app); // append mode
 
-    // extracting from the file
-    while (file.good())
-    {
-        // displaying content
-        if (!getline (file, line)) break;
-        c++;
-        //cout << "KAINOURIO MAKATZUNI!!!" << endl;
-        Vector_Item item(c);
-
-        //pairnw ena ena ta xi
-        for (auto x : line){
-            if (x == ' '){
-                if(id_flag == 1){
-                    id_flag = 0;
-                }
-                else{
-                    item.push(stoi(digits));
-                }
-                digits = "";
-            }
-            else{
-               digits = digits + x;
-            }
-        }
-        //item.print_item();
-        id_flag = 1;
+    if(file.is_open()){
+        file << "Query:" << qID << endl;
+        file << "Nearest neighbor:" << NnID << endl;
+        file << "distanceLSH:" << dLSH << endl;
+        file << "distanceTrue:" << dTrue << endl;
+        file << "tLSH:" << tLSH << endl;
+        file << "tTrue:" << tTrue << endl << endl;
     }
-    cout << "Dataset with "<< c << " items" << endl;
 
     file.close();
 
-    return 0;
+    return;
+}
+
+int main(){
+
+    write_results("output_file.txt", "pirgos", "lalospito", 1.2345 , 5.4321 , 6.7890 , 9.0876);
+
 }
