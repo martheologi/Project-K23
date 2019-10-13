@@ -23,9 +23,3 @@ void write_results(string filename, string qID, string NnID, double dLSH, double
 
     return;
 }
-
-int main(){
-
-    write_results("output_file.txt", "pirgos", "lalospito", 1.2345 , 5.4321 , 6.7890 , 9.0876);
-
-}
