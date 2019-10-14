@@ -1,12 +1,17 @@
 #include <iostream>
 #include <vector>
+
 #include "structs.h"
 
 using namespace std;
 
-Vector_Item::Vector_Item(int id) : item_id(id){}
+Vector_Item::Vector_Item(){}
 
 Vector_Item::~Vector_Item(){}
+
+void Vector_Item::set_id(int id){
+    item_id = id;
+}
 
 void Vector_Item::push(double xi){
     x.push_back(xi);

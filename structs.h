@@ -9,8 +9,9 @@ class Vector_Item{
         vector<double> x;
 
     public:
-        Vector_Item(int id);
+        Vector_Item();
         ~Vector_Item();
+        void set_id(int id);
         void push(double xi);
         int get_item_id();
         vector<double> get_vector();

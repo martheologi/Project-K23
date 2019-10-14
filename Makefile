@@ -1,6 +1,6 @@
 OBJS = lsh.o VectorItem.o hash.o funct.o
 SOURCE = lsh.cpp VectorItem.cpp hash.cpp funct.cpp
-HEADER = structs.h hash.h funct.cpp
+HEADER = structs.h hash.h funct.h
 OUT = lsh
 CC = g++
 FLAGS = -g3 -c

@@ -3,10 +3,12 @@
 #include <vector>
 #include <unordered_map>
 #include <random>
+#include <string>
 #include <cmath>
 #include <bits/stdc++.h>
 
 #include "structs.h"
+#include "funct.h"
 #include "hash.h"
 
 using namespace std;
@@ -14,49 +16,17 @@ using namespace std;
 int main()
 {
     fstream file;
-    string digits = "";
-    string line;
-    int c = 0;
-    int id_flag = 1;
-    int L = 20;
+    int L = 5;
     int W = 3000;
-    int k = 5;
-    long int m = 1;
+    int k = 4;
+    long int m = pow(2, 32) - 5;
     int M = pow(2, (32/k));
-    //cout << m << endl << M << endl;
 
-    // open file
-    file.open("input_small_id");
     vector<Vector_Item> Items;
 
-    // extracting from the file
-    while (file.good())
-    {
-        if (!getline (file, line)) break;
-        c++;
-        //cout << "KAINOURIO MAKATZUNI!!!" << endl;
-        Vector_Item item(c);
+    //arxikopoiw pinaka me ta data apo to input file
+    int c = Initialize_Dataset_Vector("input_small_id", &Items);
 
-        //pairnw ena ena ta xi
-        for (auto x : line){
-            if (x == ' '){
-                if(id_flag == 1){
-                    id_flag = 0;
-                }
-                else{
-                    item.push(stod(digits));
-                }
-                digits = "";
-            }
-            else{
-               digits = digits + x;
-            }
-        }
-        //apo8hkeuw to dataset se ena vector
-        Items.push_back(item);
-        id_flag = 1;
-        //item.print_item();
-    }
     cout << "Dataset with "<< c << " items" << endl;
 
     //pinakas apo hash tables
@@ -68,31 +38,40 @@ int main()
         HT.push_back(umap);
     }
 
+    default_random_engine generator;
+    uniform_real_distribution<double> distribution(0.0,W);
     //gia ka8e dianusma tou dataset
     for(int n=0; n<c; n++){
         Vector_Item item = Items.at(n);
         int d = item.get_vector().size();
-        default_random_engine generator;
-        uniform_real_distribution<double> distribution(0.0,W);
 
         vector<int>a;
         vector<int>h;
         double s;
 
-        //ftiaxnw k hash sunarthseis
-        for(int j=0; j<k; j++){
-            //gia ka8e xi tou dianusmatos vriskw ta ai (tupos diafaneia 21)
-            for(int i=0; i<d; i++){
-                s = distribution(generator);
-                a.push_back(a_generator(item.get_vector().at(i), s, W));
-                //cout << item.get_vector().at(i)<< "|" << s << " ";
+        for(int l=0; l<L; l++){
+            //ftiaxnw k hash sunarthseis
+            for(int j=0; j<k; j++){
+                //gia ka8e xi tou dianusmatos vriskw ta ai (tupos diafaneia 21)
+                for(int i=0; i<d; i++){
+                    s = distribution(generator);
+                    a.push_back(a_generator(item.get_vector().at(i), s, W));
+                    //cout << item.get_vector().at(i)<< "|" << s << " ";
+                }
+                h.push_back(h_generator(a, d, m, M));
             }
-            h.push_back(h_generator(a, d, m, M));
+            int g = g_generator(h, k);
+            //to vazw sto hash table
+            HT.at(l).insert({g, item.get_item_id()});
         }
-        cout << endl;
     }
 
+    //anoigw kai diaxeirizomai to file me ta queries
+    file.open("query_small_id");
+
+
     file.close();
+
 
     return 0;
 }

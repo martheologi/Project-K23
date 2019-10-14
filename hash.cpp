@@ -2,6 +2,7 @@
 #include <vector>
 #include <list>
 #include <iterator>
+#include <string>
 #include <random>
 #include <cmath>
 #include <bits/stdc++.h>
@@ -21,6 +22,24 @@ int distance_l1(int x[], int y[], int n)
     return sum;
 }
 
+string concat(int a, int b)
+{
+    // Convert both the integers to string
+    string s1 = to_string(a);
+    string s2 = to_string(b);
+
+    // Concatenate both strings
+    string s = s1 + s2;
+    //cout << s << endl;
+
+    // Convert the concatenated string
+    // to integer
+    //int c = stoi(s);
+
+    // return the formed integer
+    return s;
+}
+
 int a_generator(double xi, double s, int W){
     return floor((xi-s)/W);
 }
@@ -32,6 +51,16 @@ int h_generator(vector<int> a, int d, long int m, int M){
         result += (a.at(d-(i+1)) * pow(m, i));
     }
     //cout << result <<endl;
-    cout << result%M << " ";
+    //cout << result%M << " ";
     return result%M;
+}
+
+int g_generator(vector<int> h, int k){
+    string result = concat(h.at(0), h.at(1));
+    //cout << concat()<< endl;
+    for(int i=2; i<k; i++){
+        result = concat(stoi(result), h.at(i));
+    }
+    //cout << result << endl;
+    return stoi(result);
 }
