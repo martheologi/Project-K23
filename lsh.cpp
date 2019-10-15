@@ -5,6 +5,7 @@
 #include <random>
 #include <string>
 #include <cmath>
+#include <iterator>
 #include <bits/stdc++.h>
 
 #include "structs.h"
@@ -19,7 +20,7 @@ int main()
     int L = 5;
     int W = 3000;
     int k = 4;
-    long int m = pow(2, 32) - 5;
+    long int m = 1;//pow(2, 32) - 5;
     int M = pow(2, (32/k));
 
     vector<Vector_Item> Items;
@@ -30,14 +31,15 @@ int main()
     cout << "Dataset with "<< c << " items" << endl;
 
     //pinakas apo hash tables
-    vector<unordered_map<int,int>> HT;
+    vector<unordered_multimap<int,int>> HT;
 
     //arxikopoiw hash table me key tupou int kai plhroforia tupou int (krataw mono to id afou exw to dianusma sth domh)
     for(int i=0; i<L; i++){
-        unordered_map<int, int> umap;
+        unordered_multimap<int, int> umap;
         HT.push_back(umap);
     }
 
+    //HASHIIIIIING
     default_random_engine generator;
     uniform_real_distribution<double> distribution(0.0,W);
     //gia ka8e dianusma tou dataset
@@ -60,10 +62,22 @@ int main()
                 }
                 h.push_back(h_generator(a, d, m, M));
             }
+            //ftiaxnw to g me concatenation
             int g = g_generator(h, k);
             //to vazw sto hash table
             HT.at(l).insert({g, item.get_item_id()});
         }
+    }
+
+    //printing HT
+    for(int l=0; l<L; l++){
+        unordered_multimap<int, int>:: iterator itr;
+        cout << "count = " << HT.at(l).bucket_count() << endl;
+        for(itr=HT.at(l).begin(); itr!=HT.at(l).end(); itr++){
+            cout << "key: " << itr->first << " value: " << itr->second << " in bucket: " << HT.at(l).bucket(itr->first);
+            cout << "|" << HT.at(l).bucket_size(HT.at(l).bucket(itr->first)) << endl;
+        }
+        cout << endl;
     }
 
     //anoigw kai diaxeirizomai to file me ta queries

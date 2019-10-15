@@ -22,7 +22,7 @@ int distance_l1(int x[], int y[], int n)
     return sum;
 }
 
-string concat(int a, int b)
+int concat(int a, int b)
 {
     // Convert both the integers to string
     string s1 = to_string(a);
@@ -34,10 +34,10 @@ string concat(int a, int b)
 
     // Convert the concatenated string
     // to integer
-    //int c = stoi(s);
+    int c = stoi(s);
 
     // return the formed integer
-    return s;
+    return c;
 }
 
 int a_generator(double xi, double s, int W){
@@ -56,11 +56,11 @@ int h_generator(vector<int> a, int d, long int m, int M){
 }
 
 int g_generator(vector<int> h, int k){
-    string result = concat(h.at(0), h.at(1));
+    int result = concat(h.at(0), h.at(1));
     //cout << concat()<< endl;
     for(int i=2; i<k; i++){
-        result = concat(stoi(result), h.at(i));
+        result = concat(result, h.at(i));
     }
     //cout << result << endl;
-    return stoi(result);
+    return result;
 }
