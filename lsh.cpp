@@ -70,7 +70,7 @@ int main()
     }
 
     //printing HT
-    for(int l=0; l<L; l++){
+    /*for(int l=0; l<L; l++){
         unordered_multimap<int, int>:: iterator itr;
         cout << "count = " << HT.at(l).bucket_count() << endl;
         for(itr=HT.at(l).begin(); itr!=HT.at(l).end(); itr++){
@@ -78,11 +78,39 @@ int main()
             cout << "|" << HT.at(l).bucket_size(HT.at(l).bucket(itr->first)) << endl;
         }
         cout << endl;
-    }
+    }*/
 
     //anoigw kai diaxeirizomai to file me ta queries
     file.open("query_small_id");
+    string line;
 
+    while (file.good())
+    {
+        if (!getline (file, line)) break;
+        c++;
+        Vector_Item item = get_item(line);
+
+    /*    for(int l=0; l<L; l++){
+            //ftiaxnw k hash sunarthseis
+            for(int j=0; j<k; j++){
+                //gia ka8e xi tou dianusmatos vriskw ta ai (tupos diafaneia 21)
+                for(int i=0; i<d; i++){
+                    s = distribution(generator);
+                    a.push_back(a_generator(item.get_vector().at(i), s, W));
+                    //cout << item.get_vector().at(i)<< "|" << s << " ";
+                }
+                h.push_back(h_generator(a, d, m, M));
+            }
+            //ftiaxnw to g me concatenation
+            int g = g_generator(h, k);
+            //to vazw sto hash table
+            auto found = HT.at(l).find(g);
+            if(found != HT.at(l).end()){
+
+            }
+        }*/
+    }
+    cout << "done" << endl;
 
     file.close();
 
