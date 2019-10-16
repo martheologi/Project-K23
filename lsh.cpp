@@ -18,9 +18,9 @@ int main()
 {
     fstream file;
     int L = 5;
-    int W = 3000;
+    double W = 100;
     int k = 4;
-    long int m = 1;//pow(2, 32) - 5;
+    long int m = pow(2, 32) - 5;
     int M = pow(2, (32/k));
 
     vector<Vector_Item> Items;
@@ -87,10 +87,15 @@ int main()
     while (file.good())
     {
         if (!getline (file, line)) break;
+        vector<int>a;
+        vector<int>h;
+        double s;
+
         c++;
         Vector_Item item = get_item(line);
+        int d = item.get_vector().size();
 
-    /*    for(int l=0; l<L; l++){
+        for(int l=0; l<L; l++){
             //ftiaxnw k hash sunarthseis
             for(int j=0; j<k; j++){
                 //gia ka8e xi tou dianusmatos vriskw ta ai (tupos diafaneia 21)
@@ -103,12 +108,17 @@ int main()
             }
             //ftiaxnw to g me concatenation
             int g = g_generator(h, k);
-            //to vazw sto hash table
+            cout << "key of query " << item.get_item_id() << " is " << g << endl;
             auto found = HT.at(l).find(g);
             if(found != HT.at(l).end()){
-
+                auto itr = HT.at(l).equal_range(g);
+                //cout << "Elements with Key "<< g << ": ";
+                for (auto it = itr.first; it != itr.second; it++) {
+                    //cout << it->second << "\t";
+                }
             }
-        }*/
+            cout << endl;
+        }
     }
     cout << "done" << endl;
 
