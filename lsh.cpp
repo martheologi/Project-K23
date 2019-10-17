@@ -18,7 +18,7 @@ int main()
 {
     fstream file;
     int L = 5;
-    double W = 100;
+    double W = 3000;
     int k = 4;
     long int m = pow(2, 32) - 5;
     int M = pow(2, (32/k));
@@ -27,45 +27,30 @@ int main()
 
     //arxikopoiw pinaka me ta data apo to input file
     int c = Initialize_Dataset_Vector("input_small_id", &Items);
+    int buckets = c/16;
 
     cout << "Dataset with "<< c << " items" << endl;
 
     //pinakas apo hash tables
     vector<unordered_multimap<int,int>> HT;
 
-    //arxikopoiw hash table me key tupou int kai plhroforia tupou int (krataw mono to id afou exw to dianusma sth domh)
+    //arxikopoiw hash table me key tupou int kai plhroforia tupou int
+    //(krataw mono th 8esh tou ston vector Items afou exw to dianusma ekei)
     for(int i=0; i<L; i++){
         unordered_multimap<int, int> umap;
         HT.push_back(umap);
     }
 
     //HASHIIIIIING
-    default_random_engine generator;
-    uniform_real_distribution<double> distribution(0.0,W);
     //gia ka8e dianusma tou dataset
     for(int n=0; n<c; n++){
         Vector_Item item = Items.at(n);
         int d = item.get_vector().size();
 
-        vector<int>a;
-        vector<int>h;
-        double s;
-
         for(int l=0; l<L; l++){
-            //ftiaxnw k hash sunarthseis
-            for(int j=0; j<k; j++){
-                //gia ka8e xi tou dianusmatos vriskw ta ai (tupos diafaneia 21)
-                for(int i=0; i<d; i++){
-                    s = distribution(generator);
-                    a.push_back(a_generator(item.get_vector().at(i), s, W));
-                    //cout << item.get_vector().at(i)<< "|" << s << " ";
-                }
-                h.push_back(h_generator(a, d, m, M));
-            }
-            //ftiaxnw to g me concatenation
-            int g = g_generator(h, k);
+            int key = hash_key(item, buckets, d, k, L, W, M, m);//g%buckets;
             //to vazw sto hash table
-            HT.at(l).insert({g, item.get_item_id()});
+            HT.at(l).insert({key, n});
         }
     }
 
@@ -87,43 +72,15 @@ int main()
     while (file.good())
     {
         if (!getline (file, line)) break;
-        vector<int>a;
-        vector<int>h;
         double s;
 
         c++;
         Vector_Item item = get_item(line);
-        int d = item.get_vector().size();
 
-        for(int l=0; l<L; l++){
-            //ftiaxnw k hash sunarthseis
-            for(int j=0; j<k; j++){
-                //gia ka8e xi tou dianusmatos vriskw ta ai (tupos diafaneia 21)
-                for(int i=0; i<d; i++){
-                    s = distribution(generator);
-                    a.push_back(a_generator(item.get_vector().at(i), s, W));
-                    //cout << item.get_vector().at(i)<< "|" << s << " ";
-                }
-                h.push_back(h_generator(a, d, m, M));
-            }
-            //ftiaxnw to g me concatenation
-            int g = g_generator(h, k);
-            cout << "key of query " << item.get_item_id() << " is " << g << endl;
-            auto found = HT.at(l).find(g);
-            if(found != HT.at(l).end()){
-                auto itr = HT.at(l).equal_range(g);
-                //cout << "Elements with Key "<< g << ": ";
-                for (auto it = itr.first; it != itr.second; it++) {
-                    //cout << it->second << "\t";
-                }
-            }
-            cout << endl;
-        }
+        Vector_Item NN_item = AproximateNN(Items, item, HT, buckets, k, L, m, M, W);
     }
-    cout << "done" << endl;
 
     file.close();
-
 
     return 0;
 }

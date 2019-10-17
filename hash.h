@@ -1,7 +1,11 @@
-int concat(int a, int b);
+int distance_l1(vector<double>, vector<double>, int);
 
-int a_generator(double xi, double s, int W);
+int a_generator(double, double, int);
 
-int h_generator(vector<int> a, int d, long int m, int M);
+long long int modular_pow(long long int, long long int, int);
 
-int g_generator(vector<int> h, int k);
+int h_generator(vector<int>, int, long int, int);
+
+int64_t g_generator(vector<int>, int);
+
+int hash_key(Vector_Item, int, int, int, int, int, int, long int);
