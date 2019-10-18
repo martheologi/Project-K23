@@ -72,10 +72,10 @@ int main()
     while (file.good())
     {
         if (!getline (file, line)) break;
-        double s;
 
-        c++;
         Vector_Item item = get_item(line);
+
+        ////sunarthsh Vector_Item ExactNN_item = ExactNN()
 
         Vector_Item NN_item = AproximateNN(Items, item, HT, buckets, k, L, m, M, W);
     }

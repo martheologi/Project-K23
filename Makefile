@@ -1,12 +1,21 @@
-OBJS = lsh.o VectorItem.o hash.o funct.o
-SOURCE = lsh.cpp VectorItem.cpp hash.cpp funct.cpp
-HEADER = structs.h hash.h funct.h
-OUT = lsh
+OBJS1 = lsh.o VectorItem.o hash.o funct.o
+SOURCE1 = lsh.cpp VectorItem.cpp hash.cpp funct.cpp
+HEADER1 = structs.h hash.h funct.h
+OUT1 = lsh
+
+OBJS2 = cube.o VectorItem.o
+SOURCE2 = lsh.cpp VectorItem.cpp
+HEADER2 = structs.h
+OUT2 = cube
+
 CC = g++
 FLAGS = -g3 -c
 
-all: $(OBJS)
-	$(CC) -g $(OBJS) -o $(OUT)
+lsh: $(OBJS1)
+	$(CC) -g $(OBJS1) -o $(OUT1)
+
+cube: $(OBJS2)
+	$(CC) -g $(OBJS2) -o $(OUT2)
 
 lsh.o: lsh.cpp
 	$(CC) $(FLAGS) lsh.cpp
@@ -20,5 +29,8 @@ hash.o: hash.cpp
 funct.o: funct.cpp
 	$(CC) $(FLAGS) funct.cpp
 
+cube.o: cube.cpp
+	$(CC) $(FLAGS) cube.cpp
+
 clean:
-	rm -f $(OBJS) $(OUT)
+	rm -f $(OBJS1) $(OUT1) $(OBJS2) $(OUT2)
