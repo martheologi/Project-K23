@@ -63,10 +63,32 @@ int Initialize_Dataset_Vector(string filename, vector<Vector_Item>* Items){
     return c;
 }
 
+Vector_Item ExactNN(vector<Vector_Item> Items, Vector_Item item, int c){
+    int NN_pos = -1;
+    int d = item.get_vector().size();
+    int NN_dist;
+    long int min = 10000000000000;
+    int i;
+
+    for(i=0; i<c; i++){
+
+        Vector_Item neighbor_item = Items.at(i);
+        NN_dist=distance_l1(item.get_vector(), neighbor_item.get_vector(), d);
+
+        if(NN_dist<min){
+            NN_pos= i;
+            min=NN_dist;
+        }
+    }
+    cout << Items.at(NN_pos).get_item_id() << " " << NN_dist << endl;
+    return Items.at(NN_pos);
+}
+
 Vector_Item AproximateNN(vector<Vector_Item> Items, Vector_Item item, vector<unordered_multimap<int, int>> HT, int buckets, int k, int L, long int m, int M, int W){
     int NN_id = -1;
     int NN_position = -1;
     long int NN_dist = 10000000000000;
+
     int d = item.get_vector().size();
 
     for(int l=0; l<L; l++){
@@ -100,7 +122,7 @@ Vector_Item AproximateNN(vector<Vector_Item> Items, Vector_Item item, vector<uno
             cout << "!!!!!!!!!!!there is no key " << key << endl;
         //cout << endl;
     }
-    cout << "FINAL NN of query " << item.get_item_id() << " is " << Items.at(NN_position).get_item_id() << endl;
+    cout << "FINAL NN of query " << item.get_item_id() << " is " << Items.at(NN_position).get_item_id() << " " << NN_dist << endl;
     //Items.at(NN_position).print_item();
 
     return Items.at(NN_position);

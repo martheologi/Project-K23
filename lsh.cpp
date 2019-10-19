@@ -14,19 +14,25 @@
 
 using namespace std;
 
-int main()
+int main(int argc, char* argv[])
 {
     fstream file;
-    int L = 5;
+    string INfile=argv[2];
+    string Qfile=argv[4];
+    string OUTfile=argv[10];
+
+    int k= atoi(argv[6]);
+    int L= atoi(argv[8]);
+    //int L = 5;
     double W = 3000;
-    int k = 4;
+    //int k = 4;
     long int m = pow(2, 32) - 5;
     int M = pow(2, (32/k));
 
     vector<Vector_Item> Items;
 
     //arxikopoiw pinaka me ta data apo to input file
-    int c = Initialize_Dataset_Vector("input_small_id", &Items);
+    int c = Initialize_Dataset_Vector(INfile, &Items);
     int buckets = c/16;
 
     cout << "Dataset with "<< c << " items" << endl;
@@ -66,7 +72,7 @@ int main()
     }*/
 
     //anoigw kai diaxeirizomai to file me ta queries
-    file.open("query_small_id");
+    file.open(Qfile);
     string line;
 
     while (file.good())
@@ -75,7 +81,8 @@ int main()
 
         Vector_Item item = get_item(line);
 
-        ////sunarthsh Vector_Item ExactNN_item = ExactNN()
+        Vector_Item ExactNN_item = ExactNN(Items, item, c);
+
 
         Vector_Item NN_item = AproximateNN(Items, item, HT, buckets, k, L, m, M, W);
     }
