@@ -6,4 +6,4 @@ Vector_Item AproximateNN(vector<Vector_Item>, Vector_Item, vector<unordered_mult
 
 Vector_Item ExactNN(vector<Vector_Item>, Vector_Item, int);
 
-void write_results(string, string, string, double, double, double, double);
+void write_results(string, int, int, double, double);

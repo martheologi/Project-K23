@@ -6,6 +6,8 @@
 #include <string>
 #include <cmath>
 #include <iterator>
+#include <chrono>
+#include <ctime>
 #include <bits/stdc++.h>
 
 #include "structs.h"
@@ -13,9 +15,13 @@
 #include "hash.h"
 
 using namespace std;
+using namespace std::chrono;
 
 int main(int argc, char* argv[])
 {
+    std::clock_t start;
+    double t_true, t_lsh;
+
     fstream file;
     string INfile=argv[2];
     string Qfile=argv[4];
@@ -60,6 +66,17 @@ int main(int argc, char* argv[])
         }
     }
 
+    //printing HT
+    /*for(int l=0; l<L; l++){
+        unordered_multimap<int, int>:: iterator itr;
+        cout << "count = " << HT.at(l).bucket_count() << endl;
+        for(itr=HT.at(l).begin(); itr!=HT.at(l).end(); itr++){
+            cout << "key: " << itr->first << " value: " << itr->second << " in bucket: " << HT.at(l).bucket(itr->first);
+            cout << "|" << HT.at(l).bucket_size(HT.at(l).bucket(itr->first)) << endl;
+        }
+        cout << endl;
+    }*/
+
     //anoigw kai diaxeirizomai to file me ta queries
     file.open(Qfile);
     string line;
@@ -68,11 +85,17 @@ int main(int argc, char* argv[])
     {
         if (!getline (file, line)) break;
 
-        Vector_Item query = get_item(line);
+        Vector_Item item = get_item(line);
 
-        Vector_Item ExactNN_item = ExactNN(Items, query, c);
+        start = std::clock();
+        Vector_Item ExactNN_item = ExactNN(Items, item, c);
+        t_true = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
 
-        Vector_Item NN_item = AproximateNN(Items, query, HT, buckets, k, L, m, M, W);
+        start = std::clock();
+        Vector_Item NN_item = AproximateNN(Items, item, HT, buckets, k, L, m, M, W);
+        t_lsh= ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
+
+        write_results(OUTfile, item.get_item_id(), ExactNN_item.get_item_id(), t_lsh, t_true);
     }
 
     file.close();
