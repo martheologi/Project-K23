@@ -29,9 +29,7 @@ int main(int argc, char* argv[])
 
     int k= atoi(argv[6]);
     int L= atoi(argv[8]);
-    //int L = 5;
     double W = 3000;
-    //int k = 4;
     long int m = pow(2, 32) - 5;
     int M = pow(2, (32/k));
 
@@ -85,17 +83,18 @@ int main(int argc, char* argv[])
     {
         if (!getline (file, line)) break;
 
-        Vector_Item item = get_item(line);
+        Vector_Item item = initialize_item(line);
+        int ExactNN_dist, AprNN_dist;
 
         start = std::clock();
-        Vector_Item ExactNN_item = ExactNN(Items, item, c);
+        Vector_Item ExactNN_item = ExactNN(Items, item, c, &ExactNN_dist);
         t_true = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
 
         start = std::clock();
-        Vector_Item NN_item = AproximateNN(Items, item, HT, buckets, k, L, m, M, W);
+        Vector_Item NN_item = AproximateNN(Items, item, HT, buckets, k, L, m, M, W, &AprNN_dist);
         t_lsh= ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
 
-        write_results(OUTfile, item.get_item_id(), ExactNN_item.get_item_id(), t_lsh, t_true);
+        write_results(OUTfile, item.get_item_id(), ExactNN_item.get_item_id(), AprNN_dist, ExactNN_dist, t_lsh, t_true);
     }
 
     file.close();

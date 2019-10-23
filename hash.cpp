@@ -56,11 +56,31 @@ int h_generator(vector<int> a, int d, long int m, int M){
 
 //kanei concatenation ta h gia na vroume to g
 int64_t g_generator(vector<int> h, int k){
-    int64_t result = h.at(0);
-    for(int i=0; i<k; i++){
+    int64_t result = h.at(0) << 32/k | h.at(0);
+    for(int i=1; i<k; i++){
         result = result << 32/k | h.at(i);
     }
     return result;
+}
+
+int f_generator(int h, unordered_map<int, int> *f_index){
+    int f;
+    random_device rd;
+    default_random_engine generator(rd());
+    uniform_int_distribution<int> distribution(0,1);
+
+    auto found = f_index->find(h);
+
+    if(found == f_index->end()){
+        f = distribution(generator);
+        f_index->insert({h, f});
+        //cout << f << " ";
+        return f;
+    }
+    else{
+        //cout << "found " << found->second << " ";
+        return found->second;
+    }
 }
 
 //vriskei to key gia to HT sumfwna me tis diafaneies 21-22

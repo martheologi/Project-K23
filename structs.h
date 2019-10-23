@@ -27,7 +27,7 @@ class Hypercube_vertices{
     public:
         Hypercube_vertices();
         ~Hypercube_vertices();
-        void set_code(string HCcode)
+        void set_code(string HCcode);
         string get_code();
         int* get_p_vector();
-}
+};

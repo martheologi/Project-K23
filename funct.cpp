@@ -13,7 +13,7 @@
 using namespace std;
 
 //epistrefei ena vector item apo th grammh tou arxeiou pou pairnei san orisma
-Vector_Item get_item(string line){
+Vector_Item initialize_item(string line){
   Vector_Item item;
   int id_flag = 1;
   string digits = "";
@@ -51,7 +51,7 @@ int Initialize_Dataset_Vector(string filename, vector<Vector_Item>* Items){
     {
         if (!getline (file, line)) break;
         c++;
-        Vector_Item item = get_item(line);
+        Vector_Item item = initialize_item(line);
 
         //apo8hkeuw to dataset se ena vector
         Items->push_back(item);
