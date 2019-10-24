@@ -11,3 +11,5 @@ int64_t g_generator(vector<int>, int);
 int f_generator(int, unordered_map<int, int>*);
 
 int hash_key(Vector_Item, int, int, int, int, int, int, long int);
+
+string get_vertice(Vector_Item, int, int, int, int, unordered_map<int, int> *);

@@ -94,7 +94,7 @@ int main(int argc, char* argv[])
         Vector_Item NN_item = AproximateNN(Items, item, HT, buckets, k, L, m, M, W, &AprNN_dist);
         t_lsh= ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
 
-        write_results(OUTfile, item.get_item_id(), ExactNN_item.get_item_id(), AprNN_dist, ExactNN_dist, t_lsh, t_true);
+        write_results(OUTfile, item.get_item_id(), NN_item.get_item_id(), AprNN_dist, ExactNN_dist, t_lsh, t_true);
     }
 
     file.close();

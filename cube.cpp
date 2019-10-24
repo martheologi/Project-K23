@@ -15,6 +15,10 @@
 using namespace std;
 
 int main(int argc, char* argv[]){
+
+    std::clock_t start;
+    double t_true, t_cube;
+
     int k = atoi(argv[6]);//3;
     int M = atoi(argv[8]);//10;
     int probes = atoi(argv[10]);//2;
@@ -41,29 +45,48 @@ int main(int argc, char* argv[]){
     //eurethrio gia ta apotelesmata ths f
     unordered_map<int, int> f_index;
 
+    //PROJECTIOOOOON
     //gia ka8e dianusma tou dataset
     for(int n=0; n<c; n++){
-        double s;
-        random_device rd;
+
         Vector_Item item = Items.at(n);
-        int d = item.get_vector().size();
 
-        default_random_engine generator(rd());
-
-        //ftiaxnw k hash sunarthseis
-        uniform_real_distribution<double> distribution(0.0,W);
-        for(int j=0; j<k; j++){
-            vector<int>a;
-            //gia ka8e xi tou dianusmatos vriskw ta ai (tupos diafaneia 21)
-            for(int i=0; i<d; i++){
-                s = distribution(generator);
-                a.push_back(a_generator(item.get_vector().at(i), s, W));
-            }
-            int h = h_generator(a, d, m, Modulus);
-            int f = f_generator(h, &f_index);
-            
+        string vertice = get_vertice(item, k, W, m, Modulus, &f_index);
+        int pos;
+        if((pos = find_vertice(HyperCube, vertice)) != -1){
+            HyperCube.at(pos).add_point(n);
+        }
+        else{
+            Hypercube_vertices new_vertice;
+            new_vertice.set_code(vertice);
+            new_vertice.add_point(n);
+            HyperCube.push_back(new_vertice);
         }
     }
+    //print_HyperCube(HyperCube);
+
+    //anoigw kai diaxeirizomai to file me ta queries
+    file.open(Qfile);
+    string line;
+
+    while (file.good()){
+        if (!getline (file, line)) break;
+
+        Vector_Item item = initialize_item(line);
+        int ExactNN_dist, HyperCubeNN_dist;
+
+        start = std::clock();
+        Vector_Item ExactNN_item = ExactNN(Items, item, c, &ExactNN_dist);
+        t_true = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
+
+        start = std::clock();
+        Vector_Item HyperCubeNN_item = HyperCubeNN(Items, item, HyperCube, &f_index, k, M, Modulus, m, probes, W, &HyperCubeNN_dist);
+        t_cube= ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
+
+        write_results(OUTfile, item.get_item_id(), HyperCubeNN_item.get_item_id(), HyperCubeNN_dist, ExactNN_dist, t_cube, t_true);
+    }
+
+    cout << endl;
 
     return 0;
 }

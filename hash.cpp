@@ -105,3 +105,27 @@ int hash_key(Vector_Item item, int buckets, int d, int k, int L, int W, int M, l
     int64_t g = g_generator(h, k);
     return g%buckets;
 }
+
+string get_vertice(Vector_Item item, int k, int W, int m, int Modulus, unordered_map<int, int> *f_index){
+    double s;
+    random_device rd;
+    string vertice;
+    int d = item.get_vector().size();
+
+    default_random_engine generator(rd());
+
+    //ftiaxnw k hash sunarthseis
+    uniform_real_distribution<double> distribution(0.0,W);
+    for(int j=0; j<k; j++){
+        vector<int>a;
+        //gia ka8e xi tou dianusmatos vriskw ta ai (tupos diafaneia 21)
+        for(int i=0; i<d; i++){
+            s = distribution(generator);
+            a.push_back(a_generator(item.get_vector().at(i), s, W));
+        }
+        int h = h_generator(a, d, m, Modulus);
+        int f = f_generator(h, f_index);
+        vertice += ('0' + f);
+    }
+    return vertice;
+}

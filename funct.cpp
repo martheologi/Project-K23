@@ -3,8 +3,11 @@
 #include <vector>
 #include <unordered_map>
 #include <random>
+#include <string>
+#include <iterator>
 #include <cmath>
 #include <bits/stdc++.h>
+#include <bitset>
 
 #include "structs.h"
 #include "funct.h"
@@ -119,6 +122,63 @@ Vector_Item AproximateNN(vector<Vector_Item> Items, Vector_Item item, vector<uno
     }
     *AprNN_dist = NN_dist;
 
+    return Items.at(NN_position);
+}
+
+Vector_Item HyperCubeNN(vector<Vector_Item> Items, Vector_Item item, vector<Hypercube_vertices> HyperCube, unordered_map<int, int> *f_index, int k, int M, int Modulus, long int m, int probes, int W, int *HyperCubeNN_dist){
+
+    string vertice = get_vertice(item, k, W, m, Modulus, f_index);
+    int d = item.get_vector().size();
+    int NN_position = -1;
+    long int NN_dist = 10000000000000;
+    const int bits = 3;
+    //const int bits = const_cast<const int&>(k);
+
+    //psaxnw NN prwta sthn korufh pou anhkei to query
+    int pos;
+    if((pos = find_vertice(HyperCube, vertice)) != -1){
+        for(int i=0; i<HyperCube.at(pos).get_p_vector().size(); i++){
+            if(i == M) break;
+
+            Vector_Item neighbor_item = Items.at(HyperCube.at(pos).get_p_vector().at(i)); //HyperCube.at(pos).get_p_vector().at(i) se auth th 8esh krataw to position tooy shmeiou ston vector Items
+
+            if(distance_l1(neighbor_item.get_vector(), item.get_vector(), d) < NN_dist){
+                NN_position = HyperCube.at(pos).get_p_vector().at(i);
+                NN_dist = distance_l1(neighbor_item.get_vector(), item.get_vector(), d);
+            }
+        }
+    }
+    else{
+        cout << "ERROOOOOOOOR" << endl;
+    }
+
+    //psaxnw NN se probes akoma korufes
+    for(int p=0; p<probes; p++){
+        bitset<bits> bit_vertice(vertice); //metatrepei to string se bits
+        int pos;
+        bit_vertice.set(p, !bit_vertice[p]); //allazei ka8e fora ena bit
+
+        string new_vertice = bit_vertice.to_string<char,std::string::traits_type,std::string::allocator_type>();
+        //cout << new_vertice << "\t";
+        if((pos = find_vertice(HyperCube, new_vertice)) != -1){
+            for(int i=0; i<HyperCube.at(pos).get_p_vector().size(); i++){
+                if(i == M) break;
+
+                Vector_Item neighbor_item = Items.at(HyperCube.at(pos).get_p_vector().at(i)); //HyperCube.at(pos).get_p_vector().at(i) se auth th 8esh krataw to position tooy shmeiou ston vector Items
+
+                if(distance_l1(neighbor_item.get_vector(), item.get_vector(), d) < NN_dist){
+                    NN_position = HyperCube.at(pos).get_p_vector().at(i);
+                    NN_dist = distance_l1(neighbor_item.get_vector(), item.get_vector(), d);
+                }
+            }
+        }
+        else{
+            cout << "ERROOOOOOOOR" << endl;
+        }
+    }
+
+    *HyperCubeNN_dist = NN_dist;
+    //cout << NN_dist << endl;
     return Items.at(NN_position);
 }
 

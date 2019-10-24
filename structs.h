@@ -22,12 +22,17 @@ class Vector_Item{
 class Hypercube_vertices{
     private:
         string code;
-        int *p_vector;
+        vector<int> p_vector;
 
     public:
         Hypercube_vertices();
         ~Hypercube_vertices();
         void set_code(string HCcode);
         string get_code();
-        int* get_p_vector();
+        vector<int> get_p_vector();
+        void add_point(int point_pos);
 };
+
+int find_vertice(vector<Hypercube_vertices> HyperCube, string vertice);
+
+void print_HyperCube(vector<Hypercube_vertices> HyperCube);
