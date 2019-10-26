@@ -1,10 +1,10 @@
-OBJS1 = lsh.o VectorItem.o hash.o funct.o
-SOURCE1 = lsh.cpp VectorItem.cpp hash.cpp funct.cpp
+OBJS1 = lsh.o VectorItem.o hash.o funct.o bucket.o
+SOURCE1 = lsh.cpp VectorItem.cpp hash.cpp funct.cpp bucket.cpp
 HEADER1 = structs.h hash.h funct.h
 OUT1 = lsh
 
-OBJS2 = cube.o VectorItem.o Hypercube_vertices.o hash.o funct.o
-SOURCE2 = cube.cpp VectorItem.cpp Hypercube_vertices.cpp hash.cpp funct.cpp
+OBJS2 = cube.o VectorItem.o Hypercube_vertices.o hash.o funct.o bucket.o
+SOURCE2 = cube.cpp VectorItem.cpp Hypercube_vertices.cpp hash.cpp funct.cpp bucket.cpp
 HEADER2 = structs.h hash.h funct.h
 OUT2 = cube
 
@@ -28,6 +28,9 @@ Hypercube_vertices.o: Hypercube_vertices.cpp
 
 hash.o: hash.cpp
 	$(CC) $(FLAGS) hash.cpp
+
+bucket.o: bucket.cpp
+	$(CC) $(FLAGS) bucket.cpp
 
 funct.o: funct.cpp
 	$(CC) $(FLAGS) funct.cpp

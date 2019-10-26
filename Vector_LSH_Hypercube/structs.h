@@ -18,6 +18,19 @@ class Vector_Item{
         void print_item();
 };
 
+class Bucket{
+    private:
+        int key;
+        vector<int> point_pos; //krataw th 8esh tou dianusmatos ston pinaka Items
+    public:
+        Bucket();
+        ~Bucket();
+        void set_key(int k);
+        void push_pos(int pos);
+        int get_key();
+        vector<int> get_point_pos();
+        void print();
+};
 
 class Hypercube_vertices{
     private:

@@ -43,13 +43,23 @@ int main(int argc, char* argv[])
     cout << "Dataset with "<< c << " items" << endl;
 
     //pinakas apo hash tables
-    vector<unordered_multimap<int,int>> HT;
+    //vector<unordered_multimap<int,int>> HT;
 
     //arxikopoiw hash table me key tupou int kai plhroforia tupou int
     //(krataw mono th 8esh tou ston vector Items afou exw to dianusma ekei)
-    for(int i=0; i<L; i++){
-        unordered_multimap<int, int> umap;
-        HT.push_back(umap);
+    // for(int i=0; i<L; i++){
+    //     unordered_multimap<int, int> umap;
+    //     HT.push_back(umap);
+    // }
+    vector<Bucket>** HT = new vector<Bucket>* [L];
+
+    for(int l=0; l<L; l++){
+        HT[l] = new vector<Bucket>;
+        for(int i=0; i<buckets; i++){
+            Bucket b;;
+            b.set_key(i);
+            HT[l]->push_back(b);
+        }
     }
 
     //HASHIIIIIING
@@ -61,20 +71,11 @@ int main(int argc, char* argv[])
         for(int l=0; l<L; l++){
             int key = hash_key(item, buckets, d, k, L, W, M, m);//g%buckets;
             //to vazw sto hash table
-            HT.at(l).insert({key, n});
+            if((key<0) || (key>=buckets)) continue;
+            HT[l]->at(key).push_pos(n);
+            //HT.at(l).insert({key, n});
         }
     }
-
-    //printing HT
-    /*for(int l=0; l<L; l++){
-        unordered_multimap<int, int>:: iterator itr;
-        cout << "count = " << HT.at(l).bucket_count() << endl;
-        for(itr=HT.at(l).begin(); itr!=HT.at(l).end(); itr++){
-            cout << "key: " << itr->first << " value: " << itr->second << " in bucket: " << HT.at(l).bucket(itr->first);
-            cout << "|" << HT.at(l).bucket_size(HT.at(l).bucket(itr->first)) << endl;
-        }
-        cout << endl;
-    }*/
 
     //anoigw kai diaxeirizomai to file me ta queries
     file.open(Qfile);
@@ -99,6 +100,11 @@ int main(int argc, char* argv[])
     }
 
     file.close();
+
+    for(int l=0; l<L; l++){
+        delete HT[l];
+    }
+    delete[] HT;
 
     return 0;
 }

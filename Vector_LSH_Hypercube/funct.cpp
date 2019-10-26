@@ -87,7 +87,7 @@ Vector_Item ExactNN(vector<Vector_Item> Items, Vector_Item item, int c, int* Exa
     return Items.at(NN_pos);
 }
 
-Vector_Item AproximateNN(vector<Vector_Item> Items, Vector_Item item, vector<unordered_multimap<int, int>> HT, int buckets, int k, int L, long int m, int M, int W, int* AprNN_dist){
+Vector_Item AproximateNN(vector<Vector_Item> Items, Vector_Item item, vector<Bucket>** HT, int buckets, int k, int L, long int m, int M, int W, int* AprNN_dist){
     int NN_id = -1;
     int NN_position = -1;
     long int NN_dist = 10000000000000;
@@ -97,22 +97,24 @@ Vector_Item AproximateNN(vector<Vector_Item> Items, Vector_Item item, vector<uno
     for(int l=0; l<L; l++){
         //ftiaxnw k hash sunarthseis
         int key = hash_key(item, buckets, d, k, L, W, M, m);//g%buckets;
-        auto found = HT.at(l).find(key);
+        //auto found = HT.at(l).find(key);
+        if((key<0) || (key>=buckets)) key = 1;
 
-        if(found != HT.at(l).end()){
-            auto itr = HT.at(l).equal_range(key);
+        if(HT[l]->at(key).get_point_pos().size() != 0){//(found != HT.at(l).end()){
+            //auto itr = HT.at(l).equal_range(key);
 
             //gia ka8e stoixeio me kleidei key
             int retrieved_items = 0;
-            for (auto it = itr.first; it != itr.second; it++) {
+            for(int p=0; p<HT[l]->at(key).get_point_pos().size(); p++){//(auto it = itr.first; it != itr.second; it++) {
                 retrieved_items++;
-                Vector_Item neighbor_item = Items.at(it->second); //edw 8a xreiastei mia find an to id den einai 0-n
+                int pos = HT[l]->at(key).get_point_pos().at(p);
+                Vector_Item neighbor_item = Items.at(pos);//Items.at(it->second); //edw 8a xreiastei mia find an to id den einai 0-n
 
                 if(retrieved_items > 3*L) break;
 
                 if(distance_l1(item.get_vector(), neighbor_item.get_vector(), d) < NN_dist){
                    NN_id = neighbor_item.get_item_id();
-                   NN_position = it->second;
+                   NN_position = pos;//it->second;
                    NN_dist = distance_l1(item.get_vector(), neighbor_item.get_vector(), d);
                 }
             }

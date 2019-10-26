@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 
+
 #include "structs.h"
 
 using namespace std;
@@ -35,6 +36,7 @@ vector<Point> Curve::get_points(){
 }
 
 void Curve::print(){
+    std::cout.precision(16);
     cout << "Curve " << id << " with " << m << " points ------> ";
     for(int i=0; i<points.size(); i++){
         cout << "(" << points.at(i).get_x() << " , " << points.at(i).get_y() << ") ";

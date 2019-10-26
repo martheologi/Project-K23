@@ -32,4 +32,5 @@ class Curve{
         string get_id();
         int get_m();
         vector<Point> get_points();
+        void print();
 };
