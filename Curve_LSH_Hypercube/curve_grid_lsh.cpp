@@ -33,6 +33,17 @@ int main(int argc, char* argv[]){
     // }
     cout << "Dataset with " << c << " curves"<<endl;
 
+    /*for(int i=0; i<2; i++){
+        int m1 = Curves_dataset.at(i).get_points().size();
+        int m2 = Curves_dataset.at(0).get_points().size();
+        double **table = DTW(Curves_dataset.at(i), Curves_dataset.at(0));
+        cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"<<endl;
+        print_table(table, m1, m2);
+        for(int t=0; t<m1+1; t++)
+            delete[] table[i];
+        delete[] table;
+    }*/
+
 
     return 0;
 }
