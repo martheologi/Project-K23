@@ -69,7 +69,7 @@ int main(int argc, char* argv[])
         int d = item.get_vector().size();
 
         for(int l=0; l<L; l++){
-            int key = hash_key(item, buckets, d, k, L, W, M, m);//g%buckets;
+            int key = hash_key(item, buckets, d, k, W, M, m);//g%buckets;
             //to vazw sto hash table
             if((key<0) || (key>=buckets)) continue;
             HT[l]->at(key).push_pos(n);

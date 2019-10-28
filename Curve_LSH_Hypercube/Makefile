@@ -1,6 +1,6 @@
-OBJS1 = curve_grid_lsh.o Point.o Curve.o funct.o
-SOURCE1 = curve_grid_lsh.cpp Point.cpp Curve.cpp funct.cpp
-HEADER1 = structs.h funct.h
+OBJS1 = curve_grid_lsh.o Point.o Curve.o curve_funct.o
+SOURCE1 = curve_grid_lsh.cpp Point.cpp Curve.cpp curve_funct.cpp
+HEADER1 = structs.h curve_funct.h
 OUT1 = curve_grid_lsh
 
 CC = g++
@@ -15,8 +15,8 @@ Point.o: Point.cpp
 Curve.o: Curve.cpp
 	$(CC) $(FLAGS) Curve.cpp
 
-funct.o: funct.cpp
-	$(CC) $(FLAGS) funct.cpp
+curve_funct.o: curve_funct.cpp
+	$(CC) $(FLAGS) curve_funct.cpp
 
 curve_grid_lsh.o: curve_grid_lsh.cpp
 	$(CC) $(FLAGS) curve_grid_lsh.cpp

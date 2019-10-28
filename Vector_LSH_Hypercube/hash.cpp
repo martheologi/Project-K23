@@ -84,7 +84,7 @@ int f_generator(int h, unordered_map<int, int> *f_index){
 }
 
 //vriskei to key gia to HT sumfwna me tis diafaneies 21-22
-int hash_key(Vector_Item item, int buckets, int d, int k, int L, int W, int M, long int m){
+int hash_key(Vector_Item item, int buckets, int d, int k, int W, int M, long int m){
     double s;
     random_device rd;
     default_random_engine generator(rd());
@@ -103,7 +103,7 @@ int hash_key(Vector_Item item, int buckets, int d, int k, int L, int W, int M, l
     }
     //ftiaxnw to g me concatenation
     int64_t g = g_generator(h, k);
-    return g%buckets;
+    return abs(g%buckets);
 }
 
 string get_vertice(Vector_Item item, int k, int W, int m, int Modulus, unordered_map<int, int> *f_index){

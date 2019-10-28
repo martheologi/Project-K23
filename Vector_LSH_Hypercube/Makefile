@@ -8,6 +8,12 @@ SOURCE2 = cube.cpp VectorItem.cpp Hypercube_vertices.cpp hash.cpp funct.cpp buck
 HEADER2 = structs.h hash.h funct.h
 OUT2 = cube
 
+OBJS3 = curve_grid_lsh.o Point.o Curve.o curve_funct.o bucket.o VectorItem.o funct.o hash.o
+SOURCE3 = curve_grid_lsh.cpp Point.cpp Curve.cpp curve_funct.cpp bucket.cpp VectorItem.cpp funct.cpp hash.cpp
+HEADER3 = structs.h curve_funct.h funct.h
+OUT3 = curve_grid_lsh
+
+
 CC = g++
 FLAGS = -g3 -c
 
@@ -16,6 +22,9 @@ lsh: $(OBJS1)
 
 cube: $(OBJS2)
 	$(CC) -g $(OBJS2) -o $(OUT2)
+
+cg_lsh: $(OBJS3)
+	$(CC) -g $(OBJS3) -o $(OUT3)
 
 lsh.o: lsh.cpp
 	$(CC) $(FLAGS) lsh.cpp
@@ -38,5 +47,17 @@ funct.o: funct.cpp
 cube.o: cube.cpp
 	$(CC) $(FLAGS) cube.cpp
 
+Point.o: Point.cpp
+	$(CC) $(FLAGS) Point.cpp
+
+Curve.o: Curve.cpp
+	$(CC) $(FLAGS) Curve.cpp
+
+curve_funct.o: curve_funct.cpp
+	$(CC) $(FLAGS) curve_funct.cpp
+
+curve_grid_lsh.o: curve_grid_lsh.cpp
+	$(CC) $(FLAGS) curve_grid_lsh.cpp
+
 clean:
-	rm -f $(OBJS1) $(OUT1) $(OBJS2) $(OUT2) output_*
+	rm -f $(OBJS1) $(OUT1) $(OBJS2) $(OUT2) $(OBJS3) $(OUT3) output_*

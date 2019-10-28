@@ -2,7 +2,6 @@
 #include <vector>
 #include <string>
 
-
 #include "structs.h"
 
 using namespace std;

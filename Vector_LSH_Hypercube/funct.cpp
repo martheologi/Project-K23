@@ -96,7 +96,7 @@ Vector_Item AproximateNN(vector<Vector_Item> Items, Vector_Item item, vector<Buc
 
     for(int l=0; l<L; l++){
         //ftiaxnw k hash sunarthseis
-        int key = hash_key(item, buckets, d, k, L, W, M, m);//g%buckets;
+        int key = hash_key(item, buckets, d, k, W, M, m);//g%buckets;
         //auto found = HT.at(l).find(key);
         if((key<0) || (key>=buckets)) key = 1;
 
