@@ -168,6 +168,52 @@ void print_table(double** table, int m1, int m2){
     }
 }
 
+//epistrefei dianusma ftiaxnontas thn grin kampulh
+Vector_Item grid_curve_vector(Curve curve, int max_points, int max_coord){
+    int d = 2;
+    double delta = 0.000001;
+    vector<Point> grid;
+
+    random_device rd;
+    default_random_engine generator(rd());
+    uniform_real_distribution<double> distribution(0.0,d);
+
+    //gia ka8e shmeio 8a ftiaksw to (a1*delta, a2*delta)
+    for(int p=0; p<curve.get_m(); p++){
+        Point t, point = curve.get_points().at(p);
+        Point g;
+        double a1, a2;
+
+        t.set_x(distribution(generator));
+        t.set_y(distribution(generator));
+        a1_a2(&a1, &a2, t, point, delta);
+
+        //cout << "a1 = " << a1 << " a2 = "<< a2 << endl;
+        g.set_x((a1*delta)+t.get_x());
+        g.set_y((a2*delta)+t.get_y());
+
+        int found = 0;
+        for(int i=0; i<grid.size(); i++){
+            if((grid.at(i).get_x() == g.get_x()) && (grid.at(i).get_y() == g.get_y())){
+                found = 1;
+                break;
+            }
+        }
+        if(found == 0) grid.push_back(g);
+    }
+    //ftixnw dianisma apo to grid
+    Vector_Item item;
+    //vazw se dianusma me th seira ta xi kai ta yi apo ta points ths curve
+    for(int i=0; i<grid.size(); i++){
+            item.push(grid.at(i).get_x());
+            item.push(grid.at(i).get_y());
+    }
+    for(int i=grid.size(); i<max_points*2; i++){
+        item.push(max_coord);
+    }
+    return item;
+}
+
 Curve curve_ExactNN(vector<Curve> Curves_dataset, Curve curve, int c, double* ExactNN_dist){
     int NN_pos = -1;
     //int d = curve.get_vector().size();
@@ -201,47 +247,8 @@ Curve curve_AproximateNN(vector<Curve> Curves_dataset, Curve curve, vector<Bucke
 
     for(int l=0; l<L_grid; l++){
         //ftiaxnw to grid ths kampulhs
-        int d = 2;
-        double delta = 0.000001;
-        vector<Point> grid;
+        Vector_Item item = grid_curve_vector(curve, max_points, max_coord);
 
-        random_device rd;
-        default_random_engine generator(rd());
-        uniform_real_distribution<double> distribution(0.0,d);
-
-        //gia ka8e shmeio 8a ftiaksw to (a1*delta, a2*delta)
-        for(int p=0; p<curve.get_m(); p++){
-            Point t, point = curve.get_points().at(p);
-            Point g;
-            double a1, a2;
-
-            t.set_x(distribution(generator));
-            t.set_y(distribution(generator));
-            a1_a2(&a1, &a2, t, point, delta);
-
-            //cout << "a1 = " << a1 << " a2 = "<< a2 << endl;
-            g.set_x((a1*delta)+t.get_x());
-            g.set_y((a2*delta)+t.get_y());
-
-            int found = 0;
-            for(int i=0; i<grid.size(); i++){
-                if((grid.at(i).get_x() == g.get_x()) && (grid.at(i).get_y() == g.get_y())){
-                    found = 1;
-                    break;
-                }
-            }
-            if(found == 0) grid.push_back(g);
-        }
-        //ftixnw dianisma apo to grid
-        Vector_Item item;
-        //vazw se dianusma me th seira ta xi kai ta yi apo ta points ths curve
-        for(int i=0; i<grid.size(); i++){
-                item.push(grid.at(i).get_x());
-                item.push(grid.at(i).get_y());
-        }
-        for(int i=grid.size(); i<max_points*2; i++){
-            item.push(max_coord);
-        }
         //to vazw se hash table
         int key = hash_key(item, buckets, max_points*2, k_vec, W, M, m);
         if((key<0) || (key>=buckets)) continue;
@@ -278,6 +285,72 @@ Curve curve_AproximateNN(vector<Curve> Curves_dataset, Curve curve, vector<Bucke
     return Curves_dataset.at(NN_position);
 }
 
+Curve curve_HyperCubeNN(vector<Curve> Curves_dataset, Curve curve, vector<Hypercube_vertices> HyperCube, unordered_map<int, int> *f_index, int k, int M, int Modulus, long int m, int probes, int W, double *HyperCubeNN_dist, int max_points, int max_coord){
+    Vector_Item item = grid_curve_vector(curve, max_points, max_coord);
+
+    string vertice = get_vertice(item, k, W, m, Modulus, f_index);
+
+    int dim = item.get_vector().size();
+    int NN_position = -1;
+    long int NN_dist = 10000000000000;
+    const int bits = 3;
+    //const int bits = const_cast<const int&>(k);
+
+    //psaxnw NN prwta sthn korufh pou anhkei to query
+    int pos;
+    if((pos = find_vertice(HyperCube, vertice)) != -1){
+        for(int i=0; i<HyperCube.at(pos).get_p_vector().size(); i++){
+            if(i == M) break;
+
+            Curve neighbor_curve = Curves_dataset.at(HyperCube.at(pos).get_p_vector().at(i)); //HyperCube.at(pos).get_p_vector().at(i) se auth th 8esh krataw to position tooy shmeiou ston vector Items
+
+            int m1 = neighbor_curve.get_points().size();
+            int m2 = curve.get_points().size();
+            double **table = DTW(neighbor_curve,curve);
+
+            if(table[m1-1][m2-1] < NN_dist){
+                NN_position = HyperCube.at(pos).get_p_vector().at(i);
+                NN_dist = table[m1-1][m2-1];
+            }
+        }
+    }
+    else{
+        cout << "ERROOOOOOOOR" << endl;
+    }
+
+    //psaxnw NN se probes akoma korufes
+    for(int p=0; p<probes; p++){
+        bitset<bits> bit_vertice(vertice); //metatrepei to string se bits
+        int pos;
+        bit_vertice.set(p, !bit_vertice[p]); //allazei ka8e fora ena bit
+        string new_vertice = bit_vertice.to_string<char,std::string::traits_type,std::string::allocator_type>();
+
+        if((pos = find_vertice(HyperCube, new_vertice)) != -1){
+            for(int i=0; i<HyperCube.at(pos).get_p_vector().size(); i++){
+                if(i == M) break;
+
+                Curve neighbor_curve = Curves_dataset.at(HyperCube.at(pos).get_p_vector().at(i)); //HyperCube.at(pos).get_p_vector().at(i) se auth th 8esh krataw to position tooy shmeiou ston vector Items
+
+                int m1 = neighbor_curve.get_points().size();
+                int m2 = curve.get_points().size();
+                double **table = DTW(neighbor_curve,curve);
+
+                if(table[m1-1][m2-1] < NN_dist){
+                    NN_position = HyperCube.at(pos).get_p_vector().at(i);
+                    NN_dist = table[m1-1][m2-1];
+                }
+            }
+        }
+        else{
+            cout << "ERROOOOOOOOR" << endl;
+        }
+    }
+
+    *HyperCubeNN_dist = NN_dist;
+    //cout << NN_dist << endl;
+    return Curves_dataset.at(NN_position);
+}
+
 void write_curve_results(string Method, string HashFunction, string OUTfile, string Q_curve, string ExactNN_curve, string NN_curve, double AprNN_dist, double ExactNN_dist){
 
     ofstream file;
@@ -287,8 +360,8 @@ void write_curve_results(string Method, string HashFunction, string OUTfile, str
         file << "Query: " << Q_curve << endl;
         file << "Method: " << Method << endl;
         file << "HashFunction: " << HashFunction << endl;
-        file << "Found Nearest neighbor: " << ExactNN_curve << endl;
-        file << "True Nearest neighbor: " << NN_curve << endl;
+        file << "Found Nearest neighbor: " << NN_curve << endl;
+        file << "True Nearest neighbor: " << ExactNN_curve << endl;
         file << "distanceFound: " << AprNN_dist << endl;
         file << "distanceTrue: " << ExactNN_dist << endl;
         file << endl;

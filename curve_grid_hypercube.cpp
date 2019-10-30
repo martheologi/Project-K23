@@ -54,65 +54,46 @@ int main(int argc, char* argv[]){
         Curve curve = Curves_dataset.at(n);
 
       //  for(int l=0; l<L_grid; l++){
-            //ftiaxnw to grid ths kampulhs
-            int d = 2;
-            double delta = 0.000001;
-            vector<Point> grid;
+        //ftiaxnw to grid ths kampulhs
+        Vector_Item item = grid_curve_vector(curve, max_points, max_coord);
 
-            random_device rd;
-            default_random_engine generator(rd());
-            uniform_real_distribution<double> distribution(0.0,d);
-
-            //gia ka8e shmeio 8a ftiaksw to (a1*delta, a2*delta)
-            for(int p=0; p<curve.get_m(); p++){
-                Point t, point = curve.get_points().at(p);
-                Point g;
-                double a1, a2;
-
-                t.set_x(distribution(generator));
-                t.set_y(distribution(generator));
-                a1_a2(&a1, &a2, t, point, delta);
-
-                //cout << "a1 = " << a1 << " a2 = "<< a2 << endl;
-                g.set_x((a1*delta)+t.get_x());
-                g.set_y((a2*delta)+t.get_y());
-
-                int found = 0;
-                for(int i=0; i<grid.size(); i++){
-                    if((grid.at(i).get_x() == g.get_x()) && (grid.at(i).get_y() == g.get_y())){
-                        found = 1;
-                        break;
-                    }
-                }
-                if(found == 0) grid.push_back(g);
-            }
-            //ftixnw dianisma apo to grid
-            Vector_Item item;
-            //vazw se dianusma me th seira ta xi kai ta yi apo ta points ths curve
-            for(int i=0; i<grid.size(); i++){
-                    item.push(grid.at(i).get_x());
-                    item.push(grid.at(i).get_y());
-            }
-            for(int i=grid.size(); i<max_points*2; i++){
-                item.push(max_coord);
-            }
-            //to vazw sto HyperCube
-            string vertice = get_vertice(item, k_hypercube, W, m, Modulus, &f_index);
-            int pos;
-            if((pos = find_vertice(HyperCube, vertice)) != -1){
-                HyperCube.at(pos).add_point(n);
-            }
-            else{
-                Hypercube_vertices new_vertice;
-                new_vertice.set_code(vertice);
-                new_vertice.add_point(n);
-                HyperCube.push_back(new_vertice);
-            }
+        //to vazw sto HyperCube
+        string vertice = get_vertice(item, k_hypercube, W, m, Modulus, &f_index);
+        int pos;
+        if((pos = find_vertice(HyperCube, vertice)) != -1){
+            HyperCube.at(pos).add_point(n);
+        }
+        else{
+            Hypercube_vertices new_vertice;
+            new_vertice.set_code(vertice);
+            new_vertice.add_point(n);
+            HyperCube.push_back(new_vertice);
+        }
         //}
     }
     cout << "finished hypercube" << endl;
 
     //print_HyperCube(HyperCube);
+
+    file.open(Qfile);
+    string line;
+    double temp;
+
+    while (file.good()){
+        if (!getline (file, line)) break;
+
+        Curve curve = Initialize_Curve(line, &temp);
+        double ExactNN_dist, HyperCubeNN_dist;
+
+        Curve ExactNN_curve = curve_ExactNN(Curves_dataset, curve, c, &ExactNN_dist);
+
+        Curve HyperCubeNN_curve = curve_HyperCubeNN(Curves_dataset, curve, HyperCube, &f_index, k_hypercube, M, Modulus, m, probes, W, &HyperCubeNN_dist, max_points, max_coord);
+
+        write_curve_results("LSH", "Hypercube", OUTfile, curve.get_id(), ExactNN_curve.get_id(), HyperCubeNN_curve.get_id(), HyperCubeNN_dist, ExactNN_dist);
+    }
+
+    cout << endl;
+
 
     return 0;
 }
