@@ -8,13 +8,13 @@ SOURCE2 = cube.cpp VectorItem.cpp Hypercube_vertices.cpp hash.cpp funct.cpp buck
 HEADER2 = structs.h hash.h funct.h
 OUT2 = cube
 
-OBJS3 = curve_grid_lsh.o Point.o Curve.o curve_funct.o bucket.o VectorItem.o funct.o hash.o
-SOURCE3 = curve_grid_lsh.cpp Point.cpp Curve.cpp curve_funct.cpp bucket.cpp VectorItem.cpp funct.cpp hash.cpp
+OBJS3 = curve_grid_lsh.o Point.o Curve.o curve_funct.o bucket.o VectorItem.o funct.o hash.o Hypercube_vertices.o
+SOURCE3 = curve_grid_lsh.cpp Point.cpp Curve.cpp curve_funct.cpp bucket.cpp VectorItem.cpp funct.cpp hash.cpp Hypercube_vertices.cpp
 HEADER3 = structs.h curve_funct.h funct.h
 OUT3 = curve_grid_lsh
 
 OBJS4 = curve_grid_hypercube.o Point.o Curve.o Hypercube_vertices.o curve_funct.o bucket.o VectorItem.o funct.o hash.o
-SOURCE4 = curve_grid_lsh.cpp Point.cpp Curve.cpp Hypercube_vertices.cpp curve_funct.cpp bucket.cpp VectorItem.cpp funct.cpp hash.cpp
+SOURCE4 = curve_grid_hypercube.cpp Point.cpp Curve.cpp Hypercube_vertices.cpp curve_funct.cpp bucket.cpp VectorItem.cpp funct.cpp hash.cpp
 HEADER4 = structs.h curve_funct.h funct.h
 OUT4 = curve_grid_hypercube
 
